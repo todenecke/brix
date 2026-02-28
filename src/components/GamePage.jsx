@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import CameraView from './CameraView'
 import { useAprilDetection } from '../hooks/useAprilDetection'
 import { shuffleSteine } from '../config/steineConfig'
@@ -96,35 +97,40 @@ export default function GamePage() {
 
   const isPlaying = gameState === 'playing'
 
-  return (
-    <div className="farben-stapeln">
-      <aside className="farben-stapeln__overlay">
-        <div className="farben-stapeln__header">
-          {gameState === 'idle' ? (
+  const navSlot = typeof document !== 'undefined' ? document.getElementById('nav-game-slot') : null
+  const navControls = navSlot && (
+    <div className="farben-stapeln__nav-controls">
+      {gameState === 'idle' ? (
+        <button
+          type="button"
+          className="farben-stapeln__btn farben-stapeln__btn--primary"
+          onClick={startGame}
+        >
+          Start
+        </button>
+      ) : (
+        <div className="farben-stapeln__nav-playing">
+          <span className="farben-stapeln__timer">{formatTime(secondsLeft)}</span>
+          {gameState === 'playing' && (
             <button
               type="button"
-              className="farben-stapeln__btn farben-stapeln__btn--primary"
-              onClick={startGame}
+              className="farben-stapeln__btn farben-stapeln__btn--stop"
+              onClick={resetGame}
             >
-              Start
+              Stop
             </button>
-          ) : (
-            <div className="farben-stapeln__header-playing">
-              <span className="farben-stapeln__timer">{formatTime(secondsLeft)}</span>
-              {gameState === 'playing' && (
-                <button
-                  type="button"
-                  className="farben-stapeln__btn farben-stapeln__btn--stop"
-                  onClick={resetGame}
-                >
-                  Stop
-                </button>
-              )}
-            </div>
           )}
         </div>
+      )}
+    </div>
+  )
 
-        {isPlaying && (
+  return (
+    <>
+      {navSlot && createPortal(navControls, navSlot)}
+      <div className="farben-stapeln">
+        <aside className="farben-stapeln__overlay">
+          {isPlaying && (
           <div className="farben-stapeln__steine">
             {[...sequence].reverse().map((stein, i) => {
               const origIndex = sequence.length - 1 - i
@@ -162,10 +168,10 @@ export default function GamePage() {
               Nochmal
             </button>
           </div>
-        )}
-      </aside>
+          )}
+        </aside>
 
-      <div className="farben-stapeln__camera-wrap">
+        <div className="farben-stapeln__camera-wrap">
         <CameraView
           onVideoReady={handleVideoReady}
           onStreamStopped={handleStreamStopped}
@@ -184,7 +190,8 @@ export default function GamePage() {
             ✓ OK
           </div>
         )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

@@ -2,8 +2,8 @@ const MAX_WIDTH = 640
 const MAX_HEIGHT = 480
 const OUTPUT_SIZE = Math.min(MAX_WIDTH, MAX_HEIGHT)
 
-/** Schmaler Streifen für Game-Erkennung: volle Höhe, schmale Breite (ca. 25 %) */
-const STRIP_WIDTH = 120
+/** Streifen für Game-Erkennung: 200px breit, volle Höhe */
+const STRIP_WIDTH = 200
 const STRIP_HEIGHT = 480
 
 export type CaptureMode = 'square' | 'strip'

@@ -7,14 +7,19 @@
 
 .camera-view--embedded {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .camera-view__video {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) scaleX(-1);
   min-width: 100%;
   min-height: 100%;
   width: auto;
@@ -24,7 +29,12 @@
 
 .camera-view__overlay {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,14 +49,15 @@
 
 .camera-view__overlay--strip {
   align-items: stretch;
+  height: 100%;
 }
 
 .camera-view__overlay--strip .camera-view__scan-container {
-  width: 25vw;
-  max-width: 140px;
-  min-width: 80px;
-  align-self: stretch;
-  flex: 0 0 auto;
+  position: absolute;
+  top: 0;
+  left: calc(50% - 100px);
+  width: 200px;
+  height: 100%;
 }
 
 .camera-view__tag-overlay {
