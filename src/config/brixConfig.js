@@ -43,3 +43,18 @@ export function shuffleSteine() {
 export const CAMERA_CONFIG = {
   displayOffsetX: 20,
 }
+
+// ============ Scan-Bereich ============
+/**
+ * Erkennungsbereich für AprilTag (weißer Rahmen in der Live-View).
+ * stripWidth: Breite des Streifens in Pixel (volle Höhe).
+ * stripHeight: Ausgabehöhe für die Erkennung (interne Auflösung).
+ * stripPosition: "left" | "center" | "right" – horizontale Position.
+ * stripOffsetX: Zusatzversatz in Pixel (positiv = rechts, negativ = links).
+ */
+export const SCAN_CONFIG = {
+  stripWidth: 200,
+  stripHeight: 480,
+  stripPosition: 'center',
+  stripOffsetX: 0,
+}

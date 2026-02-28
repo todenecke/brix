@@ -55,9 +55,22 @@
 .camera-view__overlay--strip .camera-view__scan-container {
   position: absolute;
   top: 0;
-  left: calc(50% - 100px);
-  width: 200px;
+  width: var(--strip-width, 200px);
   height: 100%;
+  transform: translateX(var(--strip-offset-x, 0));
+}
+
+.camera-view__overlay--strip .camera-view__scan-container[data-position='left'] {
+  left: 0;
+}
+
+.camera-view__overlay--strip .camera-view__scan-container[data-position='center'] {
+  left: calc(50% - var(--strip-width, 200px) / 2);
+}
+
+.camera-view__overlay--strip .camera-view__scan-container[data-position='right'] {
+  right: 0;
+  left: auto;
 }
 
 .camera-view__tag-overlay {

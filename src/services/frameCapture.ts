@@ -1,10 +1,11 @@
+import { SCAN_CONFIG } from '../config/brixConfig'
+
 const MAX_WIDTH = 640
 const MAX_HEIGHT = 480
 const OUTPUT_SIZE = Math.min(MAX_WIDTH, MAX_HEIGHT)
 
-/** Streifen für Game-Erkennung: 200px breit, volle Höhe */
-const STRIP_WIDTH = 200
-const STRIP_HEIGHT = 480
+const STRIP_WIDTH = SCAN_CONFIG.stripWidth
+const STRIP_HEIGHT = SCAN_CONFIG.stripHeight
 
 export type CaptureMode = 'square' | 'strip'
 

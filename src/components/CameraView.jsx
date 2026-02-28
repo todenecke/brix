@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { CAPTURE_STRIP_DIMS } from '../services/frameCapture'
-import { CAMERA_CONFIG } from '../config/brixConfig'
+import { CAMERA_CONFIG, SCAN_CONFIG } from '../config/brixConfig'
 import './CameraView.css'
 
 const SCAN_AREA_SIZE = 'min(70vw, 70vh)'
@@ -86,11 +86,16 @@ export default function CameraView({
         className={`camera-view__overlay ${scanMode === 'strip' ? 'camera-view__overlay--strip' : ''}`}
         style={{
           '--scan-size': SCAN_AREA_SIZE,
-          '--strip-width': `${CAPTURE_STRIP_DIMS.width}px`,
-          '--strip-height': `${CAPTURE_STRIP_DIMS.height}px`,
+          '--strip-width': `${SCAN_CONFIG.stripWidth}px`,
+          '--strip-height': `${SCAN_CONFIG.stripHeight}px`,
+          '--strip-position': SCAN_CONFIG.stripPosition ?? 'center',
+          '--strip-offset-x': `${SCAN_CONFIG.stripOffsetX ?? 0}px`,
         }}
       >
-        <div className="camera-view__scan-container">
+        <div
+          className="camera-view__scan-container"
+          data-position={scanMode === 'strip' ? (SCAN_CONFIG.stripPosition ?? 'center') : null}
+        >
           <div className="camera-view__scan-area" />
           <svg
             className="camera-view__tag-overlay"
