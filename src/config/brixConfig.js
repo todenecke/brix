@@ -1,7 +1,11 @@
 /**
+ * Brix – zentrale Konfiguration
+ */
+
+// ============ Spielsteine ============
+/**
  * Mapping: Spielstein-Farben zu AprilTag IDs
  * Die 6 magnetischen Spielsteine haben je einen AprilTag mit fester ID.
- * Hier kannst du die IDs an deine physischen Tags anpassen.
  */
 export const STEINE_CONFIG = [
   { farbe: 'blau', tagId: 0, hex: '#3b82f6' },
@@ -23,8 +27,19 @@ export function getTagIdByFarbe(farbe) {
 export function shuffleSteine() {
   const arr = [...STEINE_CONFIG]
   for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]]
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[arr[i], arr[j]] = [arr[j], arr[i]]
   }
   return arr
+}
+
+// ============ Kamera ============
+/**
+ * displayOffsetX: Horizontaler Versatz des Live-Views in Pixel.
+ * Durch die Kameraposition (z.B. seitlich im Notch) kann das Bild
+ * gegenüber der Displaymitte versetzt wirken.
+ * Positiv = nach rechts, Negativ = nach links.
+ */
+export const CAMERA_CONFIG = {
+  displayOffsetX: 20,
 }

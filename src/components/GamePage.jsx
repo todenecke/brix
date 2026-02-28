@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import CameraView from './CameraView'
 import { useAprilDetection } from '../hooks/useAprilDetection'
-import { shuffleSteine } from '../config/steineConfig'
+import { shuffleSteine } from '../config/brixConfig'
 import './GamePage.css'
 
 const INITIAL_SECONDS = 60

@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect, useState } from 'react'
 import { CAPTURE_STRIP_DIMS } from '../services/frameCapture'
+import { CAMERA_CONFIG } from '../config/brixConfig'
 import './CameraView.css'
 
 const SCAN_AREA_SIZE = 'min(70vw, 70vh)'
@@ -70,9 +71,17 @@ export default function CameraView({
     }
   }, [stopCamera])
 
+  const offsetX = CAMERA_CONFIG.displayOffsetX ?? 0
+
   return (
     <div className={`camera-view ${embedded ? 'camera-view--embedded' : ''}`}>
-      <video ref={videoRef} className="camera-view__video" playsInline muted />
+      <video
+        ref={videoRef}
+        className="camera-view__video"
+        playsInline
+        muted
+        style={{ '--camera-offset-x': `${offsetX}px` }}
+      />
       <div
         className={`camera-view__overlay ${scanMode === 'strip' ? 'camera-view__overlay--strip' : ''}`}
         style={{

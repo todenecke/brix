@@ -19,7 +19,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scaleX(-1);
+  transform: translate(calc(-50% + var(--camera-offset-x, 0px)), -50%) scaleX(-1);
   min-width: 100%;
   min-height: 100%;
   width: auto;
