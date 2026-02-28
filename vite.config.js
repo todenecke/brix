@@ -12,6 +12,9 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,wasm}'],
       },
+      manifest: {
+        orientation: 'landscape',
+      },
     }),
   ],
   server: {

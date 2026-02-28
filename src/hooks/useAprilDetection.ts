@@ -1,13 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { captureFrame } from '../services/frameCapture'
+import { captureFrame, type CaptureMode } from '../services/frameCapture'
 import type { AprilTagDetection } from '../services/aprilTagService'
+
+export interface UseAprilDetectionOptions {
+  captureMode?: CaptureMode
+}
 
 const FPS_ACTIVE = 12
 const FPS_IDLE = 4
 const FRAME_INTERVAL_ACTIVE_MS = 1000 / FPS_ACTIVE
 const FRAME_INTERVAL_IDLE_MS = 1000 / FPS_IDLE
 
-export function useAprilDetection(video: HTMLVideoElement | null) {
+export function useAprilDetection(
+  video: HTMLVideoElement | null,
+  options: UseAprilDetectionOptions = {}
+) {
+  const captureModeRef = useRef<CaptureMode>(options.captureMode ?? 'square')
+  captureModeRef.current = options.captureMode ?? 'square'
   const [currentFrameTags, setCurrentFrameTags] = useState<AprilTagDetection[]>([])
   const [accumulatedTagIds, setAccumulatedTagIds] = useState<number[]>([])
   const [isRunning, setIsRunning] = useState(false)
@@ -54,7 +63,7 @@ export function useAprilDetection(video: HTMLVideoElement | null) {
 
     if (elapsed >= intervalMs && !pendingRef.current) {
       try {
-        const imageData = captureFrame(currentVideo)
+        const imageData = captureFrame(currentVideo, captureModeRef.current)
         const id = nextDetectIdRef.current++
         const buffer = imageData.data.buffer
 

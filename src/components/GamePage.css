@@ -1,0 +1,189 @@
+.farben-stapeln {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  background: #111;
+}
+
+.farben-stapeln__overlay {
+  width: 25%;
+  min-width: 120px;
+  max-width: 180px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 0.75rem;
+  gap: 1rem;
+}
+
+.farben-stapeln__header {
+  flex-shrink: 0;
+}
+
+.farben-stapeln__header-playing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.farben-stapeln__btn {
+  padding: 0.5rem 1rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.farben-stapeln__btn--primary {
+  background: #22c55e;
+  color: #fff;
+}
+
+.farben-stapeln__btn--primary:hover {
+  background: #16a34a;
+}
+
+.farben-stapeln__btn--secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.farben-stapeln__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.farben-stapeln__btn--stop {
+  background: #ef4444;
+  color: #fff;
+}
+
+.farben-stapeln__btn--stop:hover {
+  background: #dc2626;
+}
+
+.farben-stapeln__timer {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.05em;
+}
+
+.farben-stapeln__steine {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  margin-top: 1.5rem;
+}
+
+.farben-stapeln__stein {
+  flex-shrink: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--stein-farbe, #555);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.farben-stapeln__stein--aktuell {
+  border-color: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.farben-stapeln__stein--erledigt {
+  opacity: 0.5;
+}
+
+.farben-stapeln__stein-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+  text-transform: capitalize;
+}
+
+.farben-stapeln__result {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.farben-stapeln__message {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.farben-stapeln__message--erfolg {
+  color: #22c55e;
+}
+
+.farben-stapeln__message--niederlage {
+  color: #f87171;
+}
+
+.farben-stapeln__camera-wrap {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+  background: #000;
+}
+
+.farben-stapeln__camera-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+}
+
+.farben-stapeln__camera-placeholder p {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.farben-stapeln__ok-feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #22c55e;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid #22c55e;
+  border-radius: 12px;
+  animation: farben-stapeln-ok 0.4s ease-out;
+}
+
+@keyframes farben-stapeln-ok {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}

@@ -5,6 +5,11 @@
   background: #000;
 }
 
+.camera-view--embedded {
+  position: absolute;
+  inset: 0;
+}
+
 .camera-view__video {
   position: absolute;
   top: 50%;
@@ -30,6 +35,18 @@
   position: relative;
   width: var(--scan-size, 280px);
   height: var(--scan-size, 280px);
+}
+
+.camera-view__overlay--strip {
+  align-items: stretch;
+}
+
+.camera-view__overlay--strip .camera-view__scan-container {
+  width: 25vw;
+  max-width: 140px;
+  min-width: 80px;
+  align-self: stretch;
+  flex: 0 0 auto;
 }
 
 .camera-view__tag-overlay {

@@ -1,4 +1,5 @@
 import { useRef, useCallback, useEffect, useState } from 'react'
+import { CAPTURE_STRIP_DIMS } from '../services/frameCapture'
 import './CameraView.css'
 
 const SCAN_AREA_SIZE = 'min(70vw, 70vh)'
@@ -7,6 +8,9 @@ export default function CameraView({
   onVideoReady,
   onStreamStopped,
   detectedTags = [],
+  autoStart = false,
+  embedded = false,
+  scanMode = 'square',
 }) {
   const videoRef = useRef(null)
   const streamRef = useRef(null)
@@ -48,6 +52,12 @@ export default function CameraView({
   }, [onStreamStopped])
 
   useEffect(() => {
+    if (autoStart && !isActive && !error) {
+      startCamera()
+    }
+  }, [autoStart, isActive, error, startCamera])
+
+  useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden && streamRef.current) {
         stopCamera()
@@ -61,17 +71,25 @@ export default function CameraView({
   }, [stopCamera])
 
   return (
-    <div className="camera-view">
+    <div className={`camera-view ${embedded ? 'camera-view--embedded' : ''}`}>
       <video ref={videoRef} className="camera-view__video" playsInline muted />
       <div
-        className="camera-view__overlay"
-        style={{ '--scan-size': SCAN_AREA_SIZE }}
+        className={`camera-view__overlay ${scanMode === 'strip' ? 'camera-view__overlay--strip' : ''}`}
+        style={{
+          '--scan-size': SCAN_AREA_SIZE,
+          '--strip-width': `${CAPTURE_STRIP_DIMS.width}px`,
+          '--strip-height': `${CAPTURE_STRIP_DIMS.height}px`,
+        }}
       >
         <div className="camera-view__scan-container">
           <div className="camera-view__scan-area" />
           <svg
             className="camera-view__tag-overlay"
-            viewBox="0 0 480 480"
+            viewBox={
+              scanMode === 'strip'
+                ? `0 0 ${CAPTURE_STRIP_DIMS.width} ${CAPTURE_STRIP_DIMS.height}`
+                : '0 0 480 480'
+            }
             preserveAspectRatio="none"
           >
             {detectedTags
