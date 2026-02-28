@@ -18,7 +18,7 @@ export default function CameraView({
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
-          facingMode: 'environment',
+          facingMode: 'user',
           width: { max: 640 },
         },
       })
