@@ -1,0 +1,89 @@
+.camera-view {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.camera-view__video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: cover;
+}
+
+.camera-view__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.camera-view__scan-container {
+  position: relative;
+  width: var(--scan-size, 280px);
+  height: var(--scan-size, 280px);
+}
+
+.camera-view__tag-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.camera-view__scan-area {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.4);
+}
+
+.camera-view__controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.camera-view__btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  background: #2563eb;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.camera-view__btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.camera-view__btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.camera-view__error {
+  margin: 0;
+  padding: 0 1rem;
+  font-size: 0.875rem;
+  color: #f87171;
+  text-align: center;
+}
