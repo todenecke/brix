@@ -246,6 +246,27 @@
   background: #000;
 }
 
+.farben-stapeln__orient-btn-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.farben-stapeln__orient-btn-wrap .farben-stapeln__orient-btn {
+  pointer-events: auto;
+  width: 56px;
+  height: 56px;
+}
+
+.farben-stapeln__orient-btn-wrap .farben-stapeln__orient-btn svg {
+  width: 28px;
+  height: 28px;
+}
+
 .farben-stapeln__camera-placeholder {
   position: absolute;
   inset: 0;
