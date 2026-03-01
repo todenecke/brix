@@ -244,6 +244,9 @@
   min-width: 0;
   min-height: 0;
   background: #000;
+  /* iOS: Teilnahme am Parent-Transform für Video-Rotation */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .farben-stapeln__orient-btn-wrap {
