@@ -41,7 +41,7 @@ export function shuffleSteine() {
  * Positiv = nach rechts, Negativ = nach links.
  */
 export const CAMERA_CONFIG = {
-  displayOffsetX: 20,
+  displayOffsetX: 10,
 }
 
 // ============ Scan-Bereich ============

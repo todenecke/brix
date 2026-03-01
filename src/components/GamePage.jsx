@@ -132,20 +132,31 @@ export default function GamePage() {
         <aside className="farben-stapeln__overlay">
           {isPlaying && (
           <div className="farben-stapeln__steine">
-            {[...sequence].reverse().map((stein, i) => {
-              const origIndex = sequence.length - 1 - i
-              return (
-              <div
-                key={`${stein.farbe}-${origIndex}`}
-                className={`farben-stapeln__stein ${
-                  origIndex === currentIndex ? 'farben-stapeln__stein--aktuell' : ''
-                } ${origIndex < currentIndex ? 'farben-stapeln__stein--erledigt' : ''}`}
-                style={{ '--stein-farbe': stein.hex }}
-              >
-                <span className="farben-stapeln__stein-label">{stein.farbe}</span>
-              </div>
-              );
-            })}
+            {sequence
+              .slice(0, currentIndex + 1)
+              .map((stein, i) => {
+                const origIndex = i
+                const isErledigt = origIndex < currentIndex
+                return (
+                  <div key={`${stein.farbe}-${origIndex}`} className="farben-stapeln__stein-row">
+                    <div
+                      className={`farben-stapeln__stein ${
+                        origIndex === currentIndex ? 'farben-stapeln__stein--aktuell' : ''
+                      } ${isErledigt ? 'farben-stapeln__stein--erledigt' : ''}`}
+                      style={{ '--stein-farbe': stein.hex }}
+                    >
+                      <span className="farben-stapeln__stein-label">{stein.farbe}</span>
+                    </div>
+                    <div className={`farben-stapeln__check-slot ${isErledigt ? 'farben-stapeln__check-slot--visible' : ''}`} aria-hidden="true">
+                      {isErledigt && (
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                          <path d="M5 12l5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                )
+              })}
           </div>
         )}
 
