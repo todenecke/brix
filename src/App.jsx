@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import GamePage from './components/GamePage'
 import GameScreen from './components/GameScreen'
 import MenuButton from './components/MenuButton'
+import { lockOrientationLandscape } from './utils/orientationLock'
 import './App.css'
 
 const MENU_OPTIONS = [
@@ -23,22 +24,45 @@ function App() {
       return 0
     }
   })
+  const [useNativeLock, setUseNativeLock] = useState(false)
 
   useEffect(() => {
-    try {
-      localStorage.setItem(ROTATION_STORAGE_KEY, String(rotation))
-    } catch {}
-  }, [rotation])
+    const onFullscreenChange = () => {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        setUseNativeLock(false)
+      }
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+    document.addEventListener('webkitfullscreenchange', onFullscreenChange)
+    return () => {
+      document.removeEventListener('fullscreenchange', onFullscreenChange)
+      document.removeEventListener('webkitfullscreenchange', onFullscreenChange)
+    }
+  }, [])
 
-  const cycleRotation = () => {
-    setRotation((prev) => {
-      const i = ROTATION_STEPS.indexOf(prev)
-      return ROTATION_STEPS[(i + 1) % ROTATION_STEPS.length]
-    })
-  }
+  const handleOrientationFix = useCallback(async () => {
+    const ok = await lockOrientationLandscape()
+    if (ok) {
+      setUseNativeLock(true)
+      setRotation(0)
+      try {
+        localStorage.setItem(ROTATION_STORAGE_KEY, '0')
+      } catch {}
+    } else {
+      setUseNativeLock(false)
+      setRotation((prev) => {
+        const i = ROTATION_STEPS.indexOf(prev)
+        const next = ROTATION_STEPS[(i + 1) % ROTATION_STEPS.length]
+        try {
+          localStorage.setItem(ROTATION_STORAGE_KEY, String(next))
+        } catch {}
+        return next
+      })
+    }
+  }, [])
 
   return (
-    <div className="app-rotate" style={{ '--app-rotation': `${rotation}deg` }}>
+    <div className="app-rotate" style={{ '--app-rotation': useNativeLock ? '0deg' : `${rotation}deg` }}>
       <main className="app">
         <nav className="app__nav">
           <MenuButton
@@ -52,7 +76,7 @@ function App() {
         </nav>
         <div className="app__content">
           {activePage === 'farben-stapeln' && (
-          <GamePage onRotate={cycleRotation} />
+          <GamePage onOrientationFix={handleOrientationFix} />
         )}
           {activePage === 'debug' && <GameScreen />}
         </div>

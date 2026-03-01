@@ -14,7 +14,7 @@ function formatTime(seconds) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export default function GamePage({ onRotate }) {
+export default function GamePage({ onOrientationFix }) {
   const [video, setVideo] = useState(null)
   const [gameState, setGameState] = useState('idle')
   const [sequence, setSequence] = useState([])
@@ -114,11 +114,11 @@ export default function GamePage({ onRotate }) {
           >
             Start
           </button>
-          {onRotate && (
+          {onOrientationFix && (
             <button
               type="button"
               className="farben-stapeln__orient-btn"
-              onClick={onRotate}
+              onClick={onOrientationFix}
               aria-label="Ausrichtung einstellen – Frontkamera nach unten"
               title="Ausrichtung einstellen – Frontkamera nach unten"
             >
@@ -141,11 +141,11 @@ export default function GamePage({ onRotate }) {
               Stop
             </button>
           )}
-          {onRotate && (
+          {onOrientationFix && (
             <button
               type="button"
               className="farben-stapeln__orient-btn"
-              onClick={onRotate}
+              onClick={onOrientationFix}
               aria-label="Ausrichtung einstellen – Frontkamera nach unten"
               title="Ausrichtung einstellen – Frontkamera nach unten"
             >
