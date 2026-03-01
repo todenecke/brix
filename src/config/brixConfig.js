@@ -16,32 +16,20 @@ export const STEINE_CONFIG = [
   { farbe: 'rosa', tagId: 21, hex: '#ec4899' },
 ]
 
-export function getSteinByTagId(tagId) {
-  return STEINE_CONFIG.find((s) => s.tagId === tagId)
-}
-
-export function getTagIdByFarbe(farbe) {
-  return STEINE_CONFIG.find((s) => s.farbe === farbe)?.tagId
-}
-
-export function shuffleSteine() {
-  const arr = [...STEINE_CONFIG]
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
-  }
-  return arr
-}
-
 // ============ Kamera ============
 /**
  * displayOffsetX: Horizontaler Versatz des Live-Views in Pixel.
  * Durch die Kameraposition (z.B. seitlich im Notch) kann das Bild
  * gegenüber der Displaymitte versetzt wirken.
  * Positiv = nach rechts, Negativ = nach links.
+ *
+ * liveView: Erkennungsbereich für AprilTag.
+ * - "full" = den kompletten Live-View-Bereich für die Detection benutzen
+ * - "config" = den konfigurierten Bereich (SCAN_CONFIG) benutzen
  */
 export const CAMERA_CONFIG = {
-  displayOffsetX: 10,
+  displayOffsetX: 0,
+  liveView: 'full',
 }
 
 // ============ Scan-Bereich ============

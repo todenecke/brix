@@ -9,6 +9,7 @@ export default function CameraView({
   onVideoReady,
   onStreamStopped,
   detectedTags = [],
+  captureDims = null,
   autoStart = false,
   embedded = false,
   scanMode = 'square',
@@ -83,7 +84,7 @@ export default function CameraView({
         style={{ '--camera-offset-x': `${offsetX}px` }}
       />
       <div
-        className={`camera-view__overlay ${scanMode === 'strip' ? 'camera-view__overlay--strip' : ''}`}
+        className={`camera-view__overlay ${scanMode === 'strip' ? 'camera-view__overlay--strip' : ''} ${scanMode === 'full' ? 'camera-view__overlay--full' : ''}`}
         style={{
           '--scan-size': SCAN_AREA_SIZE,
           '--strip-width': `${SCAN_CONFIG.stripWidth}px`,
@@ -100,9 +101,13 @@ export default function CameraView({
           <svg
             className="camera-view__tag-overlay"
             viewBox={
-              scanMode === 'strip'
-                ? `0 0 ${CAPTURE_STRIP_DIMS.width} ${CAPTURE_STRIP_DIMS.height}`
-                : '0 0 480 480'
+              scanMode === 'full'
+                ? captureDims
+                  ? `0 0 ${captureDims.width} ${captureDims.height}`
+                  : '0 0 640 480'
+                : scanMode === 'strip'
+                  ? `0 0 ${CAPTURE_STRIP_DIMS.width} ${CAPTURE_STRIP_DIMS.height}`
+                  : '0 0 480 480'
             }
             preserveAspectRatio="none"
           >

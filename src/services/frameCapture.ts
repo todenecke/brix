@@ -7,10 +7,11 @@ const OUTPUT_SIZE = Math.min(MAX_WIDTH, MAX_HEIGHT)
 const STRIP_WIDTH = SCAN_CONFIG.stripWidth
 const STRIP_HEIGHT = SCAN_CONFIG.stripHeight
 
-export type CaptureMode = 'square' | 'strip'
+export type CaptureMode = 'square' | 'strip' | 'full'
 
 let canvasSquare: OffscreenCanvas | null = null
 let canvasStrip: OffscreenCanvas | null = null
+let canvasFull: OffscreenCanvas | null = null
 
 function getContextSquare(): OffscreenCanvasRenderingContext2D {
   if (!canvasSquare) {
@@ -24,6 +25,13 @@ function getContextStrip(): OffscreenCanvasRenderingContext2D {
     canvasStrip = new OffscreenCanvas(STRIP_WIDTH, STRIP_HEIGHT)
   }
   return canvasStrip.getContext('2d', { willReadFrequently: true })!
+}
+
+function getContextFull(width: number, height: number): OffscreenCanvasRenderingContext2D {
+  if (!canvasFull || canvasFull.width !== width || canvasFull.height !== height) {
+    canvasFull = new OffscreenCanvas(width, height)
+  }
+  return canvasFull.getContext('2d', { willReadFrequently: true })!
 }
 
 export function captureFrame(
@@ -40,6 +48,15 @@ export function captureFrame(
     const sy = 0
     context.drawImage(video, sx, sy, srcWidth, srcHeight, 0, 0, STRIP_WIDTH, STRIP_HEIGHT)
     return context.getImageData(0, 0, STRIP_WIDTH, STRIP_HEIGHT)
+  }
+
+  if (mode === 'full') {
+    const scale = Math.min(1, MAX_WIDTH / videoWidth, MAX_HEIGHT / videoHeight)
+    const outWidth = Math.round(videoWidth * scale)
+    const outHeight = Math.round(videoHeight * scale)
+    const context = getContextFull(outWidth, outHeight)
+    context.drawImage(video, 0, 0, videoWidth, videoHeight, 0, 0, outWidth, outHeight)
+    return context.getImageData(0, 0, outWidth, outHeight)
   }
 
   const context = getContextSquare()

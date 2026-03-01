@@ -2,7 +2,8 @@ import { useState, useCallback, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import CameraView from './CameraView'
 import { useAprilDetection } from '../hooks/useAprilDetection'
-import { shuffleSteine } from '../config/brixConfig'
+import { CAMERA_CONFIG, STEINE_CONFIG } from '../config/brixConfig'
+import { shuffleSteine } from '../services/steineService'
 import './GamePage.css'
 
 const INITIAL_SECONDS = 60
@@ -13,7 +14,7 @@ function formatTime(seconds) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export default function GamePage() {
+export default function GamePage({ onRotate }) {
   const [video, setVideo] = useState(null)
   const [gameState, setGameState] = useState('idle')
   const [sequence, setSequence] = useState([])
@@ -23,8 +24,12 @@ export default function GamePage() {
   const timerRef = useRef(null)
   const lastDetectedTagRef = useRef(null)
 
-  const { detectedTags, isRunning, start, stop } = useAprilDetection(video, {
-    captureMode: 'strip',
+  const liveView = CAMERA_CONFIG.liveView ?? 'config'
+  const captureMode = liveView === 'full' ? 'full' : 'strip'
+  const scanMode = liveView === 'full' ? 'full' : 'strip'
+
+  const { detectedTags, captureDims, isRunning, start, stop } = useAprilDetection(video, {
+    captureMode,
   })
 
   const startGame = useCallback(() => {
@@ -101,13 +106,31 @@ export default function GamePage() {
   const navControls = navSlot && (
     <div className="farben-stapeln__nav-controls">
       {gameState === 'idle' ? (
-        <button
-          type="button"
-          className="farben-stapeln__btn farben-stapeln__btn--primary"
-          onClick={startGame}
-        >
-          Start
-        </button>
+        <div className="farben-stapeln__nav-start">
+          <button
+            type="button"
+            className="farben-stapeln__btn farben-stapeln__btn--primary"
+            onClick={startGame}
+          >
+            Start
+          </button>
+          {onRotate && (
+            <button
+              type="button"
+              className="farben-stapeln__rotate-btn"
+              onClick={onRotate}
+              aria-label="Bildschirm drehen"
+              title="Bildschirm drehen"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 2v6h-6" />
+                <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                <path d="M3 22v-6h6" />
+                <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+              </svg>
+            </button>
+          )}
+        </div>
       ) : (
         <div className="farben-stapeln__nav-playing">
           <span className="farben-stapeln__timer">{formatTime(secondsLeft)}</span>
@@ -120,6 +143,22 @@ export default function GamePage() {
               Stop
             </button>
           )}
+          {onRotate && (
+            <button
+              type="button"
+              className="farben-stapeln__rotate-btn"
+              onClick={onRotate}
+              aria-label="Bildschirm drehen"
+              title="Bildschirm drehen"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 2v6h-6" />
+                <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                <path d="M3 22v-6h6" />
+                <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+              </svg>
+            </button>
+          )}
         </div>
       )}
     </div>
@@ -130,6 +169,28 @@ export default function GamePage() {
       {navSlot && createPortal(navControls, navSlot)}
       <div className="farben-stapeln">
         <aside className="farben-stapeln__overlay">
+          {gameState === 'idle' && (
+            <div className="farben-stapeln__anleitung">
+              <h2 className="farben-stapeln__anleitung-ueberschrift">Anleitung</h2>
+              <p className="farben-stapeln__anleitung-text">
+                Staple die farbigen Steine in der Reihenfolge, die oben erscheint. Halte jeden Stein in den Rahmen.
+              </p>
+              <div className="farben-stapeln__anleitung-steine">
+                {STEINE_CONFIG.map((stein, i) => (
+                  <div
+                    key={stein.farbe}
+                    className="farben-stapeln__stein farben-stapeln__stein--anleitung"
+                    style={{ '--stein-farbe': stein.hex }}
+                  >
+                    <span className="farben-stapeln__stein-label">{stein.farbe}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="farben-stapeln__anleitung-hinweis">
+                📷 Frontkamera muss unten sein
+              </p>
+            </div>
+          )}
           {isPlaying && (
           <div className="farben-stapeln__steine">
             {sequence
@@ -187,15 +248,11 @@ export default function GamePage() {
           onVideoReady={handleVideoReady}
           onStreamStopped={handleStreamStopped}
           detectedTags={isPlaying ? detectedTags : []}
+          captureDims={captureDims}
           autoStart
           embedded
-          scanMode="strip"
+          scanMode={scanMode}
         />
-        {gameState === 'idle' && (
-          <div className="farben-stapeln__camera-placeholder">
-            <p>Klicke Start, um zu beginnen</p>
-          </div>
-        )}
         {showOkFeedback && (
           <div className="farben-stapeln__ok-feedback" aria-live="polite">
             ✓ OK

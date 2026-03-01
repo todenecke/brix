@@ -1,3 +1,24 @@
+.app-rotate {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 100vmax;
+  height: 100vmax;
+  transform: translate(-50%, -50%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-rotate .app {
+  transform: rotate(var(--app-rotation, 0deg));
+  transform-origin: center center;
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
 .app {
   display: flex;
   flex-direction: column;

@@ -18,6 +18,7 @@ export function useAprilDetection(
   const captureModeRef = useRef<CaptureMode>(options.captureMode ?? 'square')
   captureModeRef.current = options.captureMode ?? 'square'
   const [currentFrameTags, setCurrentFrameTags] = useState<AprilTagDetection[]>([])
+  const [captureDims, setCaptureDims] = useState<{ width: number; height: number } | null>(null)
   const [accumulatedTagIds, setAccumulatedTagIds] = useState<number[]>([])
   const [isRunning, setIsRunning] = useState(false)
 
@@ -89,7 +90,7 @@ export function useAprilDetection(
   }, [])
 
   const handleWorkerMessage = useCallback(
-    (e: MessageEvent<{ type: string; id?: number; detections?: AprilTagDetection[] }>) => {
+    (e: MessageEvent<{ type: string; id?: number; detections?: AprilTagDetection[]; width?: number; height?: number }>) => {
       const msg = e.data
 
       if (msg.type === 'result' && msg.detections !== undefined) {
@@ -97,6 +98,9 @@ export function useAprilDetection(
         lastHadTagsRef.current = msg.detections.length > 0
         if (isMountedRef.current) {
           setCurrentFrameTags(msg.detections)
+          if (msg.width != null && msg.height != null) {
+            setCaptureDims({ width: msg.width, height: msg.height })
+          }
           if (msg.detections.length > 0) {
             setAccumulatedTagIds((prev) => {
               const existing = new Set(prev)
@@ -153,6 +157,7 @@ export function useAprilDetection(
 
   return {
     detectedTags: currentFrameTags,
+    captureDims,
     accumulatedTagIds,
     isRunning,
     start,

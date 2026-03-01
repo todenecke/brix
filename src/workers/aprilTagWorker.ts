@@ -34,7 +34,7 @@ type InMessage =
 type OutMessage =
   | { type: 'ready' }
   | { type: 'error'; message: string }
-  | { type: 'result'; id: number; detections: AprilTagDetection[] }
+  | { type: 'result'; id: number; detections: AprilTagDetection[]; width: number; height: number }
 
 let detectFn: ((
   grayscale: Uint8Array,
@@ -158,12 +158,12 @@ function handleDetect(msg: Extract<InMessage, { type: 'detect' }>): void {
   const { id, buffer, width, height } = msg
 
   if (!moduleRef || !detectFn) {
-    self.postMessage({ type: 'result', id, detections: [] } as OutMessage)
+    self.postMessage({ type: 'result', id, detections: [], width, height } as OutMessage)
     return
   }
 
   const detections = runDetection(buffer, width, height)
-  self.postMessage({ type: 'result', id, detections } as OutMessage)
+  self.postMessage({ type: 'result', id, detections, width, height } as OutMessage)
 }
 
 self.onmessage = (e: MessageEvent<InMessage>) => {
