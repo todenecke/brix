@@ -12,9 +12,6 @@
 }
 
 .app-rotate .app {
-  -webkit-transform: rotate(var(--app-rotation, 0deg));
-  transform: rotate(var(--app-rotation, 0deg));
-  transform-origin: center center;
   width: 100vw;
   height: 100vh;
   flex-shrink: 0;
