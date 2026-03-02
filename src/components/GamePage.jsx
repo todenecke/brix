@@ -112,21 +112,6 @@ export default function GamePage({
     <div className="farben-stapeln__nav-controls">
       {gameState === 'idle' ? (
         <div className="farben-stapeln__nav-start">
-          {onRotateContent && (
-            <button
-              type="button"
-              className="farben-stapeln__orient-btn farben-stapeln__orient-btn--content"
-              onClick={onRotateContent}
-              aria-label="Rotation Content – Spielsteine, Anleitung drehen"
-              title="Rotation Content"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <path d="M9 3v18" />
-                <path d="M15 3v18" />
-              </svg>
-            </button>
-          )}
           <button
             type="button"
             className="farben-stapeln__btn farben-stapeln__btn--primary"
@@ -166,6 +151,27 @@ export default function GamePage({
               <p className="farben-stapeln__anleitung-text">
                 Staple die farbigen Steine in der Reihenfolge, die oben erscheint. Halte jeden Stein in den Rahmen.
               </p>
+              <p className="farben-stapeln__anleitung-hinweis">
+                📷 Frontkamera muss unten sein
+              </p>
+              {onRotateContent && (
+                <div className="farben-stapeln__anleitung-rotate-wrap">
+                  <button
+                    type="button"
+                    className="farben-stapeln__orient-btn farben-stapeln__orient-btn--content"
+                    onClick={onRotateContent}
+                    aria-label="Rotation Content – Spielsteine, Anleitung drehen"
+                    title="Rotation Content"
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 2v6h-6" />
+                      <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                      <path d="M3 22v-6h6" />
+                      <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+                    </svg>
+                  </button>
+                </div>
+              )}
               <div className="farben-stapeln__anleitung-steine">
                 {STEINE_CONFIG.map((stein, i) => (
                   <div
@@ -177,9 +183,6 @@ export default function GamePage({
                   </div>
                 ))}
               </div>
-              <p className="farben-stapeln__anleitung-hinweis">
-                📷 Frontkamera muss unten sein
-              </p>
             </div>
           )}
           {isPlaying && (
@@ -248,8 +251,10 @@ export default function GamePage({
               title="Rotation Live View"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                <circle cx="12" cy="13" r="4" />
+                <path d="M21 2v6h-6" />
+                <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                <path d="M3 22v-6h6" />
+                <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
               </svg>
             </button>
           </div>

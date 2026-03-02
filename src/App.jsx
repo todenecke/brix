@@ -9,7 +9,7 @@ const MENU_OPTIONS = [
   { value: 'debug', label: 'Debug', type: 'debug' },
 ]
 
-const ROTATION_STEPS = [0, 90, 180, 270]
+const ROTATION_DELTA = 180
 const ROTATION_CONTENT_KEY = 'brix-rotation-content'
 const ROTATION_LIVEVIEW_KEY = 'brix-rotation-liveview'
 
@@ -17,7 +17,7 @@ function loadRotation(key) {
   try {
     const stored = localStorage.getItem(key)
     const val = stored ? parseInt(stored, 10) : 0
-    return ROTATION_STEPS.includes(val) ? val : 0
+    return Number.isFinite(val) ? val % 360 : 0
   } catch {
     return 0
   }
@@ -30,8 +30,7 @@ function App() {
 
   const cycleRotation = useCallback((key, setter) => {
     setter((prev) => {
-      const i = ROTATION_STEPS.indexOf(prev)
-      const next = ROTATION_STEPS[(i + 1) % ROTATION_STEPS.length]
+      const next = (prev + ROTATION_DELTA) % 360
       try {
         localStorage.setItem(key, String(next))
       } catch {}

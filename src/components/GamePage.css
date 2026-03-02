@@ -160,6 +160,12 @@
   line-height: 1.4;
 }
 
+.farben-stapeln__anleitung-rotate-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 0.25rem 0;
+}
+
 .farben-stapeln__anleitung-steine {
   display: flex;
   flex-direction: column-reverse;
