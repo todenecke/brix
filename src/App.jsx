@@ -55,9 +55,6 @@ function App() {
             activeValue={activePage}
             onSelect={setActivePage}
           />
-          {activePage === 'farben-stapeln' && (
-            <div id="nav-game-slot" className="app__nav-slot" />
-          )}
         </nav>
         <div className="app__content">
           {activePage === 'farben-stapeln' && (

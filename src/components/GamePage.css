@@ -55,6 +55,17 @@
   height: 22px;
 }
 
+.farben-stapeln__orient-btn--content {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.farben-stapeln__orient-btn--content svg {
+  width: 18px;
+  height: 18px;
+}
+
 .farben-stapeln__nav-playing {
   display: flex;
   flex-direction: row;
@@ -160,10 +171,88 @@
   line-height: 1.4;
 }
 
-.farben-stapeln__anleitung-rotate-wrap {
+.farben-stapeln__anleitung-hinweis-row {
   display: flex;
-  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
   margin: 0.25rem 0;
+}
+
+.farben-stapeln__anleitung-hinweis-row .farben-stapeln__anleitung-hinweis {
+  margin: 0;
+}
+
+.farben-stapeln__game-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 0.5rem 0;
+}
+
+.farben-stapeln__game-controls .farben-stapeln__btn--primary,
+.farben-stapeln__game-controls .farben-stapeln__btn--play {
+  width: 100%;
+}
+
+.farben-stapeln__btn--play,
+.farben-stapeln__btn--play-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.farben-stapeln__btn--play svg,
+.farben-stapeln__btn--play-toggle svg {
+  width: 32px;
+  height: 32px;
+}
+
+.farben-stapeln__btn--play {
+  background: #22c55e;
+  color: #fff;
+}
+
+.farben-stapeln__btn--play:hover,
+.farben-stapeln__btn--play-toggle.farben-stapeln__btn--play:hover {
+  background: #16a34a;
+}
+
+.farben-stapeln__btn--pause {
+  background: #ef4444;
+  color: #fff;
+}
+
+.farben-stapeln__btn--pause:hover {
+  background: #dc2626;
+}
+
+.farben-stapeln__game-controls--playing {
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+
+.farben-stapeln__game-controls--playing .farben-stapeln__timer {
+  display: block;
+  font-size: 2.25rem;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.farben-stapeln__game-controls--playing .farben-stapeln__btn--play-toggle {
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.farben-stapeln__game-controls--playing .farben-stapeln__btn--stop {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
 }
 
 .farben-stapeln__anleitung-steine {
@@ -254,23 +343,43 @@
   transform-origin: center center;
 }
 
-.farben-stapeln__orient-btn-wrap {
+.farben-stapeln__liveview-idle-controls {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
   pointer-events: none;
   z-index: 10;
 }
 
-.farben-stapeln__orient-btn-wrap .farben-stapeln__orient-btn {
+.farben-stapeln__liveview-idle-controls > * {
   pointer-events: auto;
+}
+
+.farben-stapeln__btn--liveview {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.farben-stapeln__btn--liveview svg {
+  width: 28px;
+  height: 28px;
+}
+
+.farben-stapeln__orient-btn--liveview {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
   width: 56px;
   height: 56px;
 }
 
-.farben-stapeln__orient-btn-wrap .farben-stapeln__orient-btn svg {
+.farben-stapeln__orient-btn--liveview svg {
   width: 28px;
   height: 28px;
 }

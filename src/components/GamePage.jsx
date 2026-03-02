@@ -1,5 +1,4 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { createPortal } from 'react-dom'
 import CameraView from './CameraView'
 import { useAprilDetection } from '../hooks/useAprilDetection'
 import { CAMERA_CONFIG, STEINE_CONFIG } from '../config/brixConfig'
@@ -44,6 +43,16 @@ export default function GamePage({
     setGameState('playing')
     setShowOkFeedback(false)
     lastDetectedTagRef.current = null
+  }, [])
+
+  const pauseGame = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current)
+    stop()
+    setGameState('paused')
+  }, [stop])
+
+  const resumeGame = useCallback(() => {
+    setGameState('playing')
   }, [])
 
   useEffect(() => {
@@ -106,41 +115,10 @@ export default function GamePage({
   }, [stop])
 
   const isPlaying = gameState === 'playing'
-
-  const navSlot = typeof document !== 'undefined' ? document.getElementById('nav-game-slot') : null
-  const navControls = navSlot && (
-    <div className="farben-stapeln__nav-controls">
-      {gameState === 'idle' ? (
-        <div className="farben-stapeln__nav-start">
-          <button
-            type="button"
-            className="farben-stapeln__btn farben-stapeln__btn--primary"
-            onClick={startGame}
-          >
-            Start
-          </button>
-        </div>
-      ) : (
-        <div className="farben-stapeln__nav-playing">
-          <span className="farben-stapeln__timer">{formatTime(secondsLeft)}</span>
-          {gameState === 'playing' && (
-            <button
-              type="button"
-              className="farben-stapeln__btn farben-stapeln__btn--stop"
-              onClick={resetGame}
-            >
-              Stop
-            </button>
-          )}
-        </div>
-      )}
-    </div>
-  )
+  const isPaused = gameState === 'paused'
 
   return (
-    <>
-      {navSlot && createPortal(navControls, navSlot)}
-      <div className="farben-stapeln">
+    <div className="farben-stapeln">
         <aside
           className="farben-stapeln__overlay"
           style={rotationContent ? { transform: `rotate(${rotationContent}deg)` } : undefined}
@@ -151,11 +129,11 @@ export default function GamePage({
               <p className="farben-stapeln__anleitung-text">
                 Staple die farbigen Steine in der Reihenfolge, die oben erscheint. Halte jeden Stein in den Rahmen.
               </p>
-              <p className="farben-stapeln__anleitung-hinweis">
-                📷 Frontkamera muss unten sein
-              </p>
-              {onRotateContent && (
-                <div className="farben-stapeln__anleitung-rotate-wrap">
+              <div className="farben-stapeln__anleitung-hinweis-row">
+                <p className="farben-stapeln__anleitung-hinweis">
+                  Frontkamera muss unten sein
+                </p>
+                {onRotateContent && (
                   <button
                     type="button"
                     className="farben-stapeln__orient-btn farben-stapeln__orient-btn--content"
@@ -170,8 +148,8 @@ export default function GamePage({
                       <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
                     </svg>
                   </button>
-                </div>
-              )}
+                )}
+              </div>
               <div className="farben-stapeln__anleitung-steine">
                 {STEINE_CONFIG.map((stein, i) => (
                   <div
@@ -185,8 +163,29 @@ export default function GamePage({
               </div>
             </div>
           )}
-          {isPlaying && (
-          <div className="farben-stapeln__steine">
+          {(isPlaying || isPaused) && (
+          <>
+            <div className="farben-stapeln__game-controls farben-stapeln__game-controls--playing">
+              <span className="farben-stapeln__timer">{formatTime(secondsLeft)}</span>
+              <button
+                type="button"
+                className={`farben-stapeln__btn farben-stapeln__btn--play-toggle ${isPlaying ? 'farben-stapeln__btn--pause' : 'farben-stapeln__btn--play'}`}
+                onClick={isPlaying ? pauseGame : resumeGame}
+                aria-label={isPlaying ? 'Pausieren' : 'Fortsetzen'}
+                title={isPlaying ? 'Pausieren' : 'Fortsetzen'}
+              >
+                {isPlaying ? (
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </button>
+            </div>
+            <div className="farben-stapeln__steine">
             {sequence
               .slice(0, currentIndex + 1)
               .map((stein, i) => {
@@ -212,7 +211,8 @@ export default function GamePage({
                   </div>
                 )
               })}
-          </div>
+            </div>
+          </>
         )}
 
         {(gameState === 'won' || gameState === 'lost') && (
@@ -241,22 +241,35 @@ export default function GamePage({
           className="farben-stapeln__camera-wrap"
           style={rotationLiveView ? { transform: `rotate(${rotationLiveView}deg)` } : undefined}
         >
-        {gameState === 'idle' && onRotateLiveView && (
-          <div className="farben-stapeln__orient-btn-wrap">
+        {gameState === 'idle' && (
+          <div className="farben-stapeln__liveview-idle-controls">
             <button
               type="button"
-              className="farben-stapeln__orient-btn farben-stapeln__orient-btn--center farben-stapeln__orient-btn--liveview"
-              onClick={onRotateLiveView}
-              aria-label="Rotation Live View – Kamerabild drehen"
-              title="Rotation Live View"
+              className="farben-stapeln__btn farben-stapeln__btn--play farben-stapeln__btn--liveview"
+              onClick={startGame}
+              aria-label="Spiel starten"
+              title="Spiel starten"
             >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 2v6h-6" />
-                <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
-                <path d="M3 22v-6h6" />
-                <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
               </svg>
             </button>
+            {onRotateLiveView && (
+              <button
+                type="button"
+                className="farben-stapeln__orient-btn farben-stapeln__orient-btn--center farben-stapeln__orient-btn--liveview"
+                onClick={onRotateLiveView}
+                aria-label="Rotation Live View – Kamerabild drehen"
+                title="Rotation Live View"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 2v6h-6" />
+                  <path d="M3 12a9 9 0 0 1 15-6.7L21 8" />
+                  <path d="M3 22v-6h6" />
+                  <path d="M21 12a9 9 0 0 1-15 6.7L3 16" />
+                </svg>
+              </button>
+            )}
           </div>
         )}
         <CameraView
@@ -274,7 +287,6 @@ export default function GamePage({
           </div>
         )}
         </div>
-      </div>
-    </>
+    </div>
   )
 }
