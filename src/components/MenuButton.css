@@ -22,19 +22,19 @@
   padding: 0;
   border: none;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
+  background: #eab308;
+  color: rgba(0, 0, 0, 0.8);
   cursor: pointer;
   transition: background 0.2s;
   font-family: inherit;
 }
 
 .menu-button__trigger:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: #facc15;
 }
 
 .menu-button__trigger:active {
-  background: rgba(255, 255, 255, 0.3);
+  background: #ca8a04;
 }
 
 .menu-button__icon {
@@ -42,23 +42,33 @@
   height: 22px;
 }
 
+.menu-button__dropdown-wrapper {
+  position: fixed;
+  top: 56px;
+  left: 0;
+  bottom: 0;
+  width: 220px;
+  background: #000;
+  z-index: 99;
+  padding: 1rem 0 0 1rem;
+}
+
 .menu-button__dropdown {
-  position: absolute;
-  top: calc(100% + 6px);
   min-width: 180px;
   padding: 0.25rem;
   background: rgba(0, 0, 0, 0.95);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  display: inline-block;
 }
 
-.menu-button--left .menu-button__dropdown {
-  left: 0;
-}
-
-.menu-button--right .menu-button__dropdown {
+.menu-button__dropdown-wrapper--right {
+  left: auto;
   right: 0;
+  padding-left: 0;
+  padding-right: 1rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .menu-button__option {
@@ -86,6 +96,6 @@
 }
 
 .menu-button__option--active {
-  background: #2563eb;
-  color: #fff;
+  background: #eab308;
+  color: rgba(0, 0, 0, 0.8);
 }

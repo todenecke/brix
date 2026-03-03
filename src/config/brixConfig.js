@@ -2,6 +2,13 @@
  * Brix – zentrale Konfiguration
  */
 
+// ============ Debug ============
+/**
+ * Debug-Modus im Menü anzeigen (AprilTag-Erkennung testen).
+ * true = Debug-Option im Menü, false = ausgeblendet
+ */
+export const DEBUG_MODE = true
+
 // ============ Spielsteine ============
 /**
  * Mapping: Spielstein-Farben zu AprilTag IDs

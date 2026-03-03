@@ -151,6 +151,14 @@ export function useAprilDetection(
     setAccumulatedTagIds([])
   }, [])
 
+  const startRef = useRef(start)
+  startRef.current = start
+
+  const restart = useCallback(() => {
+    stop()
+    setTimeout(() => startRef.current(), 0)
+  }, [stop])
+
   useEffect(() => {
     return cleanup
   }, [cleanup])
@@ -163,5 +171,6 @@ export function useAprilDetection(
     start,
     stop,
     reset,
+    restart,
   }
 }

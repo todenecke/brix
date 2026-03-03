@@ -1,6 +1,8 @@
 import { useState, useCallback } from 'react'
 import CameraView from './CameraView'
+import LiveViewTagInfo from './LiveViewTagInfo'
 import { useAprilDetection } from '../hooks/useAprilDetection'
+import { useDebugMode } from '../contexts/DebugModeContext'
 import { captureFrame } from '../services/frameCapture'
 import { detectPhoto } from '../services/photoDetection'
 import './GameScreen.css'
@@ -13,6 +15,7 @@ export default function GameScreen() {
   const [photoDetections, setPhotoDetections] = useState([])
   const [photoLoading, setPhotoLoading] = useState(false)
 
+  const { debugMode } = useDebugMode()
   const { detectedTags, accumulatedTagIds, isRunning, start, stop, reset } =
     useAprilDetection(video)
 
@@ -64,11 +67,26 @@ export default function GameScreen() {
 
   return (
     <div className="game-screen">
-      <CameraView
-        onVideoReady={handleVideoReady}
-        onStreamStopped={handleStreamStopped}
-        detectedTags={showTagFrames ? detectedTags : []}
-      />
+      <div className="game-screen__options">
+        <label className="game-screen__checkbox">
+          <input
+            type="checkbox"
+            checked={showTagFrames}
+            onChange={(e) => setShowTagFrames(e.target.checked)}
+          />
+          <span>Tags live Rahmen</span>
+        </label>
+      </div>
+      <div className="game-screen__live-wrap">
+        <CameraView
+          onVideoReady={handleVideoReady}
+          onStreamStopped={handleStreamStopped}
+          detectedTags={showTagFrames ? detectedTags : []}
+        />
+        {debugMode && isRunning && (
+          <LiveViewTagInfo detectedTags={detectedTags} />
+        )}
+      </div>
       {photoMode && photoDataUrl && (
         <div className="game-screen__photo-overlay">
           <div className="game-screen__photo-container">
@@ -140,16 +158,8 @@ export default function GameScreen() {
               : '–'}
           </span>
         </div>
-        <label className="game-screen__checkbox">
-          <input
-            type="checkbox"
-            checked={showTagFrames}
-            onChange={(e) => setShowTagFrames(e.target.checked)}
-          />
-          <span>Tags live Rahmen</span>
-        </label>
         <div className="game-screen__actions">
-          {!isRunning ? (
+          {!isRunning && (
             <button
               type="button"
               className="game-screen__btn game-screen__btn--primary"
@@ -157,14 +167,6 @@ export default function GameScreen() {
               disabled={!video}
             >
               Erkennung starten
-            </button>
-          ) : (
-            <button
-              type="button"
-              className="game-screen__btn game-screen__btn--secondary"
-              onClick={stop}
-            >
-              Stoppen
             </button>
           )}
           <button

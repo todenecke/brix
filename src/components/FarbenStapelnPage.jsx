@@ -1,9 +1,12 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import CameraView from './CameraView'
+import LiveViewTagInfo from './LiveViewTagInfo'
 import { useAprilDetection } from '../hooks/useAprilDetection'
+import { useProcessedTagTracker } from '../hooks/useProcessedTagTracker'
 import { CAMERA_CONFIG, STEINE_CONFIG } from '../config/brixConfig'
+import { useDebugMode } from '../contexts/DebugModeContext'
 import { shuffleSteine } from '../services/steineService'
-import './GamePage.css'
+import './FarbenStapelnPage.css'
 
 const INITIAL_SECONDS = 60
 
@@ -13,7 +16,7 @@ function formatTime(seconds) {
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
 }
 
-export default function GamePage({
+export default function FarbenStapelnPage({
   onRotateContent,
   onRotateLiveView,
   rotationContent = 0,
@@ -26,7 +29,6 @@ export default function GamePage({
   const [secondsLeft, setSecondsLeft] = useState(INITIAL_SECONDS)
   const [showOkFeedback, setShowOkFeedback] = useState(false)
   const timerRef = useRef(null)
-  const lastDetectedTagRef = useRef(null)
 
   const liveView = CAMERA_CONFIG.liveView ?? 'config'
   const captureMode = liveView === 'full' ? 'full' : 'strip'
@@ -35,6 +37,8 @@ export default function GamePage({
   const { detectedTags, captureDims, isRunning, start, stop } = useAprilDetection(video, {
     captureMode,
   })
+  const { shouldProcess, markProcessed, reset: resetTracker } = useProcessedTagTracker(detectedTags)
+  const { debugMode } = useDebugMode()
 
   const startGame = useCallback(() => {
     setSequence(shuffleSteine())
@@ -42,8 +46,8 @@ export default function GamePage({
     setSecondsLeft(INITIAL_SECONDS)
     setGameState('playing')
     setShowOkFeedback(false)
-    lastDetectedTagRef.current = null
-  }, [])
+    resetTracker()
+  }, [resetTracker])
 
   const pauseGame = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current)
@@ -87,15 +91,14 @@ export default function GamePage({
   }, [gameState])
 
   useEffect(() => {
-    if (gameState !== 'playing' || currentIndex >= sequence.length || !detectedTags.length)
-      return
+    if (gameState !== 'playing' || currentIndex >= sequence.length || !detectedTags.length) return
 
     const expectedStein = sequence[currentIndex]
     const expectedTagId = expectedStein?.tagId
     const detected = detectedTags.find((t) => t.tagId === expectedTagId)
 
-    if (detected && lastDetectedTagRef.current !== expectedTagId) {
-      lastDetectedTagRef.current = expectedTagId
+    if (detected && shouldProcess(expectedTagId)) {
+      markProcessed(expectedTagId)
       setShowOkFeedback(true)
       setTimeout(() => setShowOkFeedback(false), 400)
 
@@ -106,7 +109,7 @@ export default function GamePage({
         setCurrentIndex((i) => i + 1)
       }
     }
-  }, [gameState, currentIndex, sequence, detectedTags])
+  }, [gameState, currentIndex, sequence, detectedTags, shouldProcess, markProcessed])
 
   const handleVideoReady = useCallback((videoEl) => setVideo(videoEl), [])
   const handleStreamStopped = useCallback(() => {
@@ -129,6 +132,17 @@ export default function GamePage({
               <p className="farben-stapeln__anleitung-text">
                 Staple die farbigen Steine in der Reihenfolge, die oben erscheint. Halte jeden Stein in den Rahmen.
               </p>
+              <div className="farben-stapeln__anleitung-steine">
+                {STEINE_CONFIG.map((stein, i) => (
+                  <div
+                    key={stein.farbe}
+                    className="farben-stapeln__stein farben-stapeln__stein--anleitung"
+                    style={{ '--stein-farbe': stein.hex }}
+                  >
+                    <span className="farben-stapeln__stein-label">{stein.farbe}</span>
+                  </div>
+                ))}
+              </div>
               <div className="farben-stapeln__anleitung-hinweis-row">
                 <p className="farben-stapeln__anleitung-hinweis">
                   Frontkamera muss unten sein
@@ -149,17 +163,6 @@ export default function GamePage({
                     </svg>
                   </button>
                 )}
-              </div>
-              <div className="farben-stapeln__anleitung-steine">
-                {STEINE_CONFIG.map((stein, i) => (
-                  <div
-                    key={stein.farbe}
-                    className="farben-stapeln__stein farben-stapeln__stein--anleitung"
-                    style={{ '--stein-farbe': stein.hex }}
-                  >
-                    <span className="farben-stapeln__stein-label">{stein.farbe}</span>
-                  </div>
-                ))}
               </div>
             </div>
           )}
@@ -200,10 +203,8 @@ export default function GamePage({
                       style={{ '--stein-farbe': stein.hex }}
                     >
                       <span className="farben-stapeln__stein-label">{stein.farbe}</span>
-                    </div>
-                    <div className={`farben-stapeln__check-slot ${isErledigt ? 'farben-stapeln__check-slot--visible' : ''}`} aria-hidden="true">
                       {isErledigt && (
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                        <svg className="farben-stapeln__stein-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true">
                           <path d="M5 12l5 5L20 7" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       )}
@@ -281,6 +282,9 @@ export default function GamePage({
           embedded
           scanMode={scanMode}
         />
+        {debugMode && isPlaying && (
+          <LiveViewTagInfo detectedTags={detectedTags} />
+        )}
         {showOkFeedback && (
           <div className="farben-stapeln__ok-feedback" aria-live="polite">
             ✓ OK

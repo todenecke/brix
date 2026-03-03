@@ -1,0 +1,468 @@
+.blitzrechnen {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+  background: #111;
+}
+
+.blitzrechnen__overlay {
+  flex: 0 0 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 0.75rem 0.375rem 0.75rem 1rem;
+  gap: 1rem;
+  transform-origin: center center;
+}
+
+.blitzrechnen__orient-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.blitzrechnen__orient-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.blitzrechnen__orient-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.blitzrechnen__orient-btn--content {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.blitzrechnen__orient-btn--content svg {
+  width: 18px;
+  height: 18px;
+}
+
+.blitzrechnen__anleitung {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.blitzrechnen__anleitung-ueberschrift {
+  margin: 0 0 0.5rem 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #eab308;
+}
+
+.blitzrechnen__anleitung-text {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+.blitzrechnen__anleitung-beispiel {
+  margin-top: 0.5rem;
+}
+
+.blitzrechnen__anleitung-beispiel-label {
+  margin: 0 0 0.25rem 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.blitzrechnen__anleitung-steine {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.blitzrechnen__stein--anleitung {
+  flex: 1;
+  min-width: 80px;
+  min-height: 40px;
+  max-height: 72px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--stein-farbe, #555);
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
+.blitzrechnen__stein--anleitung .blitzrechnen__stein-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.85rem, 3.5vh, 1.1rem);
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+  text-transform: none;
+}
+
+.blitzrechnen__anleitung-hinweis-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.25rem 0;
+}
+
+.blitzrechnen__anleitung-hinweis {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 200, 100, 0.95);
+}
+
+.blitzrechnen__game-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.blitzrechnen__timer {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eab308;
+  margin-bottom: 0.75rem;
+}
+
+.blitzrechnen__stein-hinweis {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.blitzrechnen__stein-hinweis .blitzrechnen__stein--anleitung {
+  min-width: 70px;
+}
+
+.blitzrechnen__stacks {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.blitzrechnen__stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.blitzrechnen__stack-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.blitzrechnen__stack-steine {
+  flex: 1;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.2rem;
+}
+
+.blitzrechnen__stein-row {
+  display: flex;
+  align-items: center;
+}
+
+.blitzrechnen__stein-row--fall {
+  animation: blitzrechnen-stein-fall 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes blitzrechnen-stein-fall {
+  from {
+    opacity: 0;
+    transform: translateY(-100vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.blitzrechnen__stein--erledigt {
+  flex: 1;
+  min-width: 0;
+  min-height: 36px;
+  max-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--stein-farbe, rgba(255, 255, 255, 0.15));
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
+.blitzrechnen__stein--erledigt .blitzrechnen__stein-label {
+  color: rgba(0, 0, 0, 0.8);
+  font-size: 1.1rem;
+}
+
+.blitzrechnen__stein-check {
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+}
+
+.blitzrechnen__fehler-hinweis {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.blitzrechnen__btn {
+  padding: 0.5rem 1rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.blitzrechnen__btn--secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.blitzrechnen__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.blitzrechnen__btn--play,
+.blitzrechnen__btn--play-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.blitzrechnen__btn--play svg,
+.blitzrechnen__btn--play-toggle svg {
+  width: 32px;
+  height: 32px;
+}
+
+.blitzrechnen__btn--play {
+  background: #22c55e;
+  color: #fff;
+}
+
+.blitzrechnen__btn--play:hover {
+  background: #16a34a;
+}
+
+.blitzrechnen__btn--pause {
+  background: #ef4444;
+  color: #fff;
+}
+
+.blitzrechnen__btn--pause:hover {
+  background: #dc2626;
+}
+
+.blitzrechnen__message {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #eab308;
+}
+
+.blitzrechnen__aufgabe {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.blitzrechnen__aufgabe-text {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
+  font-weight: 700;
+  color: #fff;
+}
+
+.blitzrechnen__result {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.blitzrechnen__message-end {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.blitzrechnen__message-end--erfolg {
+  color: #22c55e;
+}
+
+.blitzrechnen__message-end--niederlage {
+  color: #f87171;
+}
+
+.blitzrechnen__camera-wrap {
+  flex: 0 0 50%;
+  min-width: 0;
+  position: relative;
+  min-height: 0;
+  background: #000;
+  transform-origin: center center;
+}
+
+.blitzrechnen__liveview-idle-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.blitzrechnen__liveview-idle-controls > * {
+  pointer-events: auto;
+}
+
+.blitzrechnen__btn--liveview {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.blitzrechnen__btn--liveview svg {
+  width: 28px;
+  height: 28px;
+}
+
+.blitzrechnen__orient-btn--liveview {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 56px;
+  height: 56px;
+}
+
+.blitzrechnen__orient-btn--liveview svg {
+  width: 28px;
+  height: 28px;
+}
+
+.blitzrechnen__live-aufgabe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.75rem 1.25rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(1.5rem, 6vw, 2.25rem);
+  font-weight: 700;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.75);
+  border: 2px solid #eab308;
+  border-radius: 8px;
+  pointer-events: none;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.blitzrechnen__live-aufgabe-line {
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.blitzrechnen__ok-feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #22c55e;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid #22c55e;
+  border-radius: 12px;
+  animation: blitzrechnen-feedback 0.4s ease-out;
+}
+
+.blitzrechnen__wrong-feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f87171;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid #f87171;
+  border-radius: 12px;
+  animation: blitzrechnen-feedback 0.4s ease-out;
+}
+
+@keyframes blitzrechnen-feedback {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}

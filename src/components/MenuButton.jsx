@@ -1,13 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import './MenuButton.css'
 
 export default function MenuButton({ options, activeValue, onSelect, side = 'left' }) {
   const [isOpen, setIsOpen] = useState(false)
   const menuRef = useRef(null)
+  const dropdownRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+      const inMenu = menuRef.current?.contains(e.target)
+      const inDropdown = dropdownRef.current?.contains(e.target)
+      if (!inMenu && !inDropdown) {
         setIsOpen(false)
       }
     }
@@ -49,20 +53,24 @@ export default function MenuButton({ options, activeValue, onSelect, side = 'lef
       {activeLabel && (
         <span className="menu-button__label">{activeLabel}</span>
       )}
-      {isOpen && (
-        <div className="menu-button__dropdown">
-          {options.map(({ value, label }) => (
-            <button
-              key={value}
-              type="button"
-              className={`menu-button__option ${activeValue === value ? 'menu-button__option--active' : ''}`}
-              onClick={() => handleSelect(value)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-      )}
+      {isOpen &&
+        createPortal(
+          <div ref={dropdownRef} className={`menu-button__dropdown-wrapper menu-button__dropdown-wrapper--${side}`}>
+            <div className="menu-button__dropdown">
+              {options.map(({ value, label }) => (
+                <button
+                  key={value}
+                  type="button"
+                  className={`menu-button__option ${activeValue === value ? 'menu-button__option--active' : ''}`}
+                  onClick={() => handleSelect(value)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

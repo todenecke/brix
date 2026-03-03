@@ -1,0 +1,427 @@
+.wie-weit-weg {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+  background: #111;
+}
+
+.wie-weit-weg__overlay {
+  flex: 0 0 50%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 0.75rem 0.375rem 0.75rem 1rem;
+  gap: 1rem;
+  transform-origin: center center;
+}
+
+.wie-weit-weg__orient-btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.wie-weit-weg__orient-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.wie-weit-weg__orient-btn svg {
+  width: 22px;
+  height: 22px;
+}
+
+.wie-weit-weg__orient-btn--content {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+}
+
+.wie-weit-weg__orient-btn--content svg {
+  width: 18px;
+  height: 18px;
+}
+
+.wie-weit-weg__anleitung {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+}
+
+.wie-weit-weg__anleitung-ueberschrift {
+  margin: 0 0 0.5rem 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #eab308;
+}
+
+.wie-weit-weg__anleitung-text {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.4;
+}
+
+.wie-weit-weg__anleitung-hinweis-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0 0.25rem 0;
+}
+
+.wie-weit-weg__anleitung-hinweis {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgba(255, 200, 100, 0.95);
+}
+
+.wie-weit-weg__anleitung-beispiel {
+  margin-top: 0.5rem;
+}
+
+.wie-weit-weg__anleitung-beispiel-label {
+  margin: 0 0 0.25rem 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.wie-weit-weg__anleitung-beispiel-steine {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+  margin: 0.5rem 0;
+}
+
+.wie-weit-weg__stein--anleitung {
+  flex: 0 0 auto;
+  min-height: 40px;
+  max-height: 72px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--stein-farbe, #555);
+  border-radius: 8px;
+  border: 2px solid transparent;
+}
+
+.wie-weit-weg__stein--anleitung .wie-weit-weg__stein-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.85rem, 3.5vh, 1.1rem);
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.8);
+  text-transform: none;
+}
+
+.wie-weit-weg__game-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.wie-weit-weg__attempts {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.wie-weit-weg__btn {
+  padding: 0.5rem 1rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.wie-weit-weg__btn--secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.wie-weit-weg__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.wie-weit-weg__btn--play,
+.wie-weit-weg__btn--play-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.wie-weit-weg__btn--play svg,
+.wie-weit-weg__btn--play-toggle svg {
+  width: 32px;
+  height: 32px;
+}
+
+.wie-weit-weg__btn--play {
+  background: #22c55e;
+  color: #fff;
+}
+
+.wie-weit-weg__btn--play:hover {
+  background: #16a34a;
+}
+
+.wie-weit-weg__btn--pause {
+  background: #ef4444;
+  color: #fff;
+}
+
+.wie-weit-weg__btn--pause:hover {
+  background: #dc2626;
+}
+
+.wie-weit-weg__message {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #eab308;
+}
+
+.wie-weit-weg__steine {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+}
+
+.wie-weit-weg__stein-row {
+  display: flex;
+  align-items: center;
+}
+
+.wie-weit-weg__stein-row--fall {
+  animation: wie-weit-weg-stein-fall 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes wie-weit-weg-stein-fall {
+  from {
+    opacity: 0;
+    transform: translateY(-100vh);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.wie-weit-weg__steine-container {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.wie-weit-weg__stein-pool {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+}
+
+.wie-weit-weg__stein-result {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.wie-weit-weg__stein-pool .wie-weit-weg__stein-label,
+.wie-weit-weg__stein-result .wie-weit-weg__stein-label {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.wie-weit-weg__stein:not(.wie-weit-weg__stein--anleitung) {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  max-height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--stein-farbe, rgba(255, 255, 255, 0.15));
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+
+.wie-weit-weg__stein-check {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  color: #fff;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
+}
+
+.wie-weit-weg__stein--aktuell {
+  border-color: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.wie-weit-weg__stein--erledigt .wie-weit-weg__stein-label {
+  opacity: 0.8;
+}
+
+.wie-weit-weg__stein-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(0.85rem, 3.5vh, 1.1rem);
+  font-weight: 600;
+  color: #fff;
+}
+
+
+.wie-weit-weg__result {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.wie-weit-weg__message-end {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.wie-weit-weg__message-end--erfolg {
+  color: #22c55e;
+}
+
+.wie-weit-weg__message-end--niederlage {
+  color: #f87171;
+}
+
+.wie-weit-weg__camera-wrap {
+  flex: 0 0 50%;
+  min-width: 0;
+  position: relative;
+  min-height: 0;
+  background: #000;
+  transform-origin: center center;
+}
+
+.wie-weit-weg__liveview-idle-controls {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.wie-weit-weg__liveview-idle-controls > * {
+  pointer-events: auto;
+}
+
+.wie-weit-weg__btn--liveview {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.wie-weit-weg__btn--liveview svg {
+  width: 28px;
+  height: 28px;
+}
+
+.wie-weit-weg__orient-btn--liveview {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 56px;
+  height: 56px;
+}
+
+.wie-weit-weg__orient-btn--liveview svg {
+  width: 28px;
+  height: 28px;
+}
+
+.wie-weit-weg__ok-feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #22c55e;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid #22c55e;
+  border-radius: 12px;
+  animation: wie-weit-weg-feedback 0.4s ease-out;
+}
+
+.wie-weit-weg__wrong-feedback {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem 2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #f87171;
+  background: rgba(0, 0, 0, 0.8);
+  border: 4px solid #f87171;
+  border-radius: 12px;
+  animation: wie-weit-weg-feedback 0.4s ease-out;
+}
+
+@keyframes wie-weit-weg-feedback {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
