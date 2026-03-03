@@ -82,6 +82,30 @@ export default function WieWeitWegPage({
     setRemainingCities([])
   }, [stop])
 
+  const processCorrect = useCallback(() => {
+    if (gameState !== 'playing' || currentIndex >= sequence.length) return
+    setShowOkFeedback(true)
+    setTimeout(() => setShowOkFeedback(false), 400)
+    const placedCity = sequence[currentIndex]
+    setRemainingCities((prev) => prev.filter((c) => c.stadt !== placedCity.stadt))
+    if (currentIndex + 1 >= sequence.length) {
+      setGameState('won')
+    } else {
+      setCurrentIndex((i) => i + 1)
+    }
+  }, [gameState, currentIndex, sequence])
+
+  const processWrong = useCallback(() => {
+    if (gameState !== 'playing') return
+    setShowWrongFeedback(true)
+    setTimeout(() => setShowWrongFeedback(false), 400)
+    const nextAttempts = wrongAttempts + 1
+    setWrongAttempts(nextAttempts)
+    if (nextAttempts >= MAX_FEHLVERSUCHE) {
+      setGameState('lost')
+    }
+  }, [gameState, wrongAttempts])
+
   useEffect(() => {
     if (gameState !== 'playing' || currentIndex >= sequence.length || !detectedTags.length) return
 
@@ -94,16 +118,7 @@ export default function WieWeitWegPage({
 
     if (detected && shouldProcess(detected.tagId)) {
       markProcessed(detected.tagId)
-      setShowOkFeedback(true)
-      setTimeout(() => setShowOkFeedback(false), 400)
-
-      const placedCity = sequence[currentIndex]
-      setRemainingCities((prev) => prev.filter((c) => c.stadt !== placedCity.stadt))
-      if (currentIndex + 1 >= sequence.length) {
-        setGameState('won')
-      } else {
-        setCurrentIndex((i) => i + 1)
-      }
+      processCorrect()
       return
     }
 
@@ -112,16 +127,9 @@ export default function WieWeitWegPage({
     )
     if (wrongTag && shouldProcess(wrongTag.tagId)) {
       markProcessed(wrongTag.tagId)
-      setShowWrongFeedback(true)
-      setTimeout(() => setShowWrongFeedback(false), 400)
-
-      const nextAttempts = wrongAttempts + 1
-      setWrongAttempts(nextAttempts)
-      if (nextAttempts >= MAX_FEHLVERSUCHE) {
-        setGameState('lost')
-      }
+      processWrong()
     }
-  }, [gameState, currentIndex, sequence, tagIdToCity, detectedTags, wrongAttempts, shouldProcess, markProcessed])
+  }, [gameState, currentIndex, sequence, tagIdToCity, detectedTags, wrongAttempts, shouldProcess, markProcessed, processCorrect, processWrong])
 
   const handleVideoReady = useCallback((videoEl) => setVideo(videoEl), [])
   const handleStreamStopped = useCallback(() => {
@@ -314,7 +322,27 @@ export default function WieWeitWegPage({
           scanMode={scanMode}
         />
         {debugMode && isPlaying && (
-          <LiveViewTagInfo detectedTags={detectedTags} />
+          <>
+            <LiveViewTagInfo detectedTags={detectedTags} />
+            <div className="wie-weit-weg__debug-buttons-overlay">
+              <button
+                type="button"
+                className="wie-weit-weg__debug-btn wie-weit-weg__debug-btn--richtig"
+                onClick={processCorrect}
+                title="Simulieren: richtig"
+              >
+                ✓
+              </button>
+              <button
+                type="button"
+                className="wie-weit-weg__debug-btn wie-weit-weg__debug-btn--falsch"
+                onClick={processWrong}
+                title="Simulieren: falsch"
+              >
+                ✗
+              </button>
+            </div>
+          </>
         )}
         {showOkFeedback && (
           <div className="wie-weit-weg__ok-feedback" aria-live="polite">

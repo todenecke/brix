@@ -28,6 +28,7 @@ export default function FarbenStapelnPage({
   const [currentIndex, setCurrentIndex] = useState(0)
   const [secondsLeft, setSecondsLeft] = useState(INITIAL_SECONDS)
   const [showOkFeedback, setShowOkFeedback] = useState(false)
+  const [showWrongFeedback, setShowWrongFeedback] = useState(false)
   const timerRef = useRef(null)
 
   const liveView = CAMERA_CONFIG.liveView ?? 'config'
@@ -46,6 +47,7 @@ export default function FarbenStapelnPage({
     setSecondsLeft(INITIAL_SECONDS)
     setGameState('playing')
     setShowOkFeedback(false)
+    setShowWrongFeedback(false)
     resetTracker()
   }, [resetTracker])
 
@@ -90,6 +92,24 @@ export default function FarbenStapelnPage({
     }
   }, [gameState])
 
+  const processCorrect = useCallback(() => {
+    if (gameState !== 'playing' || currentIndex >= sequence.length) return
+    setShowOkFeedback(true)
+    setTimeout(() => setShowOkFeedback(false), 400)
+    if (currentIndex + 1 >= sequence.length) {
+      if (timerRef.current) clearInterval(timerRef.current)
+      setGameState('won')
+    } else {
+      setCurrentIndex((i) => i + 1)
+    }
+  }, [gameState, currentIndex, sequence.length])
+
+  const processWrong = useCallback(() => {
+    if (gameState !== 'playing') return
+    setShowWrongFeedback(true)
+    setTimeout(() => setShowWrongFeedback(false), 400)
+  }, [gameState])
+
   useEffect(() => {
     if (gameState !== 'playing' || currentIndex >= sequence.length || !detectedTags.length) return
 
@@ -99,17 +119,9 @@ export default function FarbenStapelnPage({
 
     if (detected && shouldProcess(expectedTagId)) {
       markProcessed(expectedTagId)
-      setShowOkFeedback(true)
-      setTimeout(() => setShowOkFeedback(false), 400)
-
-      if (currentIndex + 1 >= sequence.length) {
-        if (timerRef.current) clearInterval(timerRef.current)
-        setGameState('won')
-      } else {
-        setCurrentIndex((i) => i + 1)
-      }
+      processCorrect()
     }
-  }, [gameState, currentIndex, sequence, detectedTags, shouldProcess, markProcessed])
+  }, [gameState, currentIndex, sequence, detectedTags, shouldProcess, markProcessed, processCorrect])
 
   const handleVideoReady = useCallback((videoEl) => setVideo(videoEl), [])
   const handleStreamStopped = useCallback(() => {
@@ -283,11 +295,36 @@ export default function FarbenStapelnPage({
           scanMode={scanMode}
         />
         {debugMode && isPlaying && (
-          <LiveViewTagInfo detectedTags={detectedTags} />
+          <>
+            <LiveViewTagInfo detectedTags={detectedTags} />
+            <div className="farben-stapeln__debug-buttons-overlay">
+              <button
+                type="button"
+                className="farben-stapeln__debug-btn farben-stapeln__debug-btn--richtig"
+                onClick={processCorrect}
+                title="Simulieren: richtiger Stein"
+              >
+                ✓
+              </button>
+              <button
+                type="button"
+                className="farben-stapeln__debug-btn farben-stapeln__debug-btn--falsch"
+                onClick={processWrong}
+                title="Simulieren: falscher Stein"
+              >
+                ✗
+              </button>
+            </div>
+          </>
         )}
         {showOkFeedback && (
           <div className="farben-stapeln__ok-feedback" aria-live="polite">
             ✓ OK
+          </div>
+        )}
+        {showWrongFeedback && (
+          <div className="farben-stapeln__wrong-feedback" aria-live="polite">
+            Leider falsch
           </div>
         )}
         </div>

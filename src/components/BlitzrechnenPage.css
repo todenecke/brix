@@ -240,6 +240,47 @@
   filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.9));
 }
 
+.blitzrechnen__debug-buttons-overlay {
+  position: absolute;
+  bottom: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 6;
+}
+
+.blitzrechnen__debug-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.blitzrechnen__debug-buttons-overlay .blitzrechnen__debug-btn {
+  width: 48px;
+  height: 48px;
+  font-size: 1.4rem;
+}
+
+.blitzrechnen__debug-btn:hover {
+  opacity: 0.9;
+}
+
+.blitzrechnen__debug-btn--richtig {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.blitzrechnen__debug-btn--falsch {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.2);
+}
+
 .blitzrechnen__fehler-hinweis {
   font-family: 'Orbitron', sans-serif;
   font-size: 0.9rem;

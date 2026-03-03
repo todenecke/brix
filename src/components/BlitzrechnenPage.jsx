@@ -77,6 +77,42 @@ export default function BlitzrechnenPage({
     }
   }, [gameState])
 
+  const processAnswer = useCallback(
+    (userSaidCorrect) => {
+      if (gameState !== 'playing' || currentIndex >= problems.length) return
+
+      const currentProblem = problems[currentIndex]
+      const expectedCorrect = currentProblem.isCorrect
+      const isRightAnswer = userSaidCorrect === expectedCorrect
+
+      if (isRightAnswer) {
+        setShowOkFeedback(true)
+        setTimeout(() => setShowOkFeedback(false), 400)
+        setLastAddedType('correct')
+        setCorrectCount((c) => c + 1)
+        if (currentIndex + 1 >= problems.length) {
+          stop()
+          setGameState('won')
+        } else {
+          setCurrentIndex((i) => i + 1)
+        }
+      } else {
+        setShowWrongFeedback(true)
+        setTimeout(() => setShowWrongFeedback(false), 400)
+        setLastAddedType('wrong')
+        const nextWrong = wrongCount + 1
+        setWrongCount(nextWrong)
+        if (nextWrong >= MAX_FEHLVERSUCHE) {
+          stop()
+          setGameState('lost')
+        } else {
+          setCurrentIndex((i) => i + 1)
+        }
+      }
+    },
+    [gameState, currentIndex, problems.length, wrongCount, stop]
+  )
+
   useEffect(() => {
     if (gameState !== 'playing' || currentIndex >= problems.length || !detectedTags.length) return
 
@@ -88,33 +124,8 @@ export default function BlitzrechnenPage({
 
     markProcessed(detected.tagId)
     const userSaidCorrect = detected.tagId === TAG_ID_GRUEN
-    const isRightAnswer = userSaidCorrect === expectedCorrect
-
-    if (isRightAnswer) {
-      setShowOkFeedback(true)
-      setTimeout(() => setShowOkFeedback(false), 400)
-      setLastAddedType('correct')
-      setCorrectCount((c) => c + 1)
-      if (currentIndex + 1 >= problems.length) {
-        stop()
-        setGameState('won')
-      } else {
-        setCurrentIndex((i) => i + 1)
-      }
-    } else {
-      setShowWrongFeedback(true)
-      setTimeout(() => setShowWrongFeedback(false), 400)
-      setLastAddedType('wrong')
-      const nextWrong = wrongCount + 1
-      setWrongCount(nextWrong)
-      if (nextWrong >= MAX_FEHLVERSUCHE) {
-        stop()
-        setGameState('lost')
-      } else {
-        setCurrentIndex((i) => i + 1)
-      }
-    }
-  }, [gameState, currentIndex, problems, detectedTags, wrongCount, stop, shouldProcess, markProcessed])
+    processAnswer(userSaidCorrect)
+  }, [gameState, currentIndex, problems, detectedTags, shouldProcess, markProcessed, processAnswer])
 
   const resetGame = useCallback(() => {
     stop()
@@ -300,7 +311,27 @@ export default function BlitzrechnenPage({
           scanMode={scanMode}
         />
         {debugMode && isPlaying && (
-          <LiveViewTagInfo detectedTags={detectedTags} />
+          <>
+            <LiveViewTagInfo detectedTags={detectedTags} />
+            <div className="blitzrechnen__debug-buttons-overlay">
+              <button
+                type="button"
+                className="blitzrechnen__debug-btn blitzrechnen__debug-btn--richtig"
+                onClick={() => processAnswer(true)}
+                title="Simulieren: richtig (grün)"
+              >
+                ✓
+              </button>
+              <button
+                type="button"
+                className="blitzrechnen__debug-btn blitzrechnen__debug-btn--falsch"
+                onClick={() => processAnswer(false)}
+                title="Simulieren: falsch (rot)"
+              >
+                ✗
+              </button>
+            </div>
+          </>
         )}
         {isPlaying && currentProblem && (
           <div className="blitzrechnen__live-aufgabe" aria-live="polite">
